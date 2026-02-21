@@ -2,6 +2,14 @@
 set -euo pipefail
 
 MISSING=0
+WARNINGS=0
+
+TARGET_HOME="${TARGET_HOME:-$HOME}"
+CONFIG_HOME="${CONFIG_HOME:-$TARGET_HOME/.config}"
+LOCAL_BIN_DIR="${LOCAL_BIN_DIR:-$TARGET_HOME/.local/bin}"
+LOCAL_SHARE_DIR="${LOCAL_SHARE_DIR:-$TARGET_HOME/.local/share}"
+BSPWM_DIR="${BSPWM_DIR:-$CONFIG_HOME/bspwm}"
+SXHKD_DIR="${SXHKD_DIR:-$CONFIG_HOME/sxhkd}"
 
 check_cmd() {
   local cmd="$1"
@@ -23,16 +31,45 @@ check_path() {
   fi
 }
 
+warn_cmd() {
+  local cmd="$1"
+  if command -v "$cmd" >/dev/null 2>&1; then
+    printf '[ok]   command: %s\n' "$cmd"
+  else
+    printf '[warn] command: %s\n' "$cmd"
+    WARNINGS=1
+  fi
+}
+
+warn_path() {
+  local path="$1"
+  if [[ -e "$path" ]]; then
+    printf '[ok]   path:    %s\n' "$path"
+  else
+    printf '[warn] path:    %s\n' "$path"
+    WARNINGS=1
+  fi
+}
+
 echo '== Command checks =='
 for cmd in \
   bspwm bspc sxhkd \
   polybar rofi feh dex xrandr setxkbmap \
-  picom conky nm-applet xfce4-power-manager numlockx blueberry-tray \
+  picom conky \
   pactl rg systemctl \
-  amixer playerctl xbacklight scrot maim xclip \
-  checkupdates yay sensors python
+  amixer playerctl scrot maim xclip
   do
   check_cmd "$cmd"
+done
+
+echo
+echo '== Optional command checks =='
+for cmd in \
+  nm-applet xfce4-power-manager numlockx blueberry-tray \
+  xbacklight \
+  checkupdates yay sensors python
+  do
+  warn_cmd "$cmd"
 done
 
 echo
@@ -52,26 +89,32 @@ fi
 
 echo
 echo '== File/path checks =='
-check_path "$HOME/.config/bspwm/bspwmrc"
-check_path "$HOME/.config/polybar/config.ini"
-check_path "$HOME/.config/conky/obsidian_todos.conf"
-check_path "$HOME/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf"
-check_path "$HOME/.local/bin/audio-profile"
-check_path "$HOME/.local/share/pipewire-discord-fix/restore-latest.sh"
-check_path "$HOME/drive/obsidian-vault/00 Dashboard/Todos.md"
+check_path "$BSPWM_DIR/bspwmrc"
+check_path "$SXHKD_DIR/sxhkdrc"
+check_path "$CONFIG_HOME/polybar/config.ini"
+check_path "$CONFIG_HOME/conky/obsidian_todos.conf"
+check_path "$CONFIG_HOME/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf"
+check_path "$LOCAL_BIN_DIR/audio-profile"
+check_path "$LOCAL_SHARE_DIR/pipewire-discord-fix/restore-latest.sh"
+warn_path "$TARGET_HOME/drive/obsidian-vault/00 Dashboard/Todos.md"
 
-if compgen -G "$HOME/wallpapers*" >/dev/null; then
-  echo "[ok]   path:    $HOME/wallpapers*"
+if compgen -G "$TARGET_HOME/wallpapers*" >/dev/null; then
+  echo "[ok]   path:    $TARGET_HOME/wallpapers*"
 else
-  echo "[warn] path:    $HOME/wallpapers* (no wallpapers matched)"
+  echo "[warn] path:    $TARGET_HOME/wallpapers* (no wallpapers matched)"
+  WARNINGS=1
 fi
 
-check_path "/opt/Handy.AppImage"
-check_path "/usr/local/bin/arcolinux-welcome-app"
+warn_path "/opt/Handy.AppImage"
+warn_path "/usr/local/bin/arcolinux-welcome-app"
 
 echo
 if [[ "$MISSING" -eq 0 ]]; then
-  echo 'All required checks passed.'
+  if [[ "$WARNINGS" -eq 0 ]]; then
+    echo 'All required checks passed.'
+  else
+    echo 'Required checks passed with warnings.'
+  fi
 else
   echo 'Some required checks are missing.'
   exit 1

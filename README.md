@@ -12,14 +12,39 @@ Personal bspwm backup repo for fresh installs.
 - `.config/wireplumber`
 - `.local/share/pipewire-discord-fix` (rollback snapshots + restore script)
 
-## Restore on a fresh install
+## Recommended restore (fresh install)
 ```bash
 git clone <your-remote-url> bspwm-config
 cd bspwm-config
+./bootstrap.sh --yes
+```
+
+`bootstrap.sh` does:
+- best-effort dependency install (supports `pacman`, `apt`, `dnf`, `zypper`)
+- config restore to configurable target paths
+- `sxhkd` compatibility symlink creation (`~/.config/sxhkd/sxhkdrc` -> bspwm sxhkdrc)
+- post-restore validation (`check-deps.sh`)
+
+## Custom target paths
+Use these flags if your environment uses different locations:
+```bash
+./bootstrap.sh \
+  --config-home "$HOME/.config" \
+  --bspwm-dir "$HOME/.config/bspwm" \
+  --sxhkd-dir "$HOME/.config/sxhkd"
+```
+
+To skip package installation:
+```bash
+./bootstrap.sh --skip-deps
+```
+
+If you only want to copy configs (no dependency install logic), use:
+```bash
 ./install.sh
 ```
 
-`audio-profile` runtime dependencies are included in this repo for local files/scripts.
+`audio-profile` local file dependencies are included in this repo.
 
 ## Runtime requirements
 - `pactl` (PulseAudio/PipeWire utilities)

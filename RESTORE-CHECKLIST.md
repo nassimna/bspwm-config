@@ -11,6 +11,21 @@ This repo now includes the config paths needed by your active BSPWM setup:
 - `.local/bin/audio-profile`
 - `.local/share/pipewire-discord-fix`
 
+## Recommended restore command
+
+```bash
+./bootstrap.sh --yes
+```
+
+If your target machine uses a different layout, override target paths:
+
+```bash
+./bootstrap.sh \
+  --config-home "$HOME/.config" \
+  --bspwm-dir "$HOME/.config/bspwm" \
+  --sxhkd-dir "$HOME/.config/sxhkd"
+```
+
 ## External files outside this repo
 
 These are referenced by your current config and should exist on the fresh system:
