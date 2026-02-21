@@ -3,19 +3,43 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-echo "[1/5] Syncing bspwm config from $HOME/.config/bspwm"
-rsync -a --delete "$HOME/.config/bspwm/" "$ROOT_DIR/.config/bspwm/"
+CONFIG_DIRS=(
+  "bspwm"
+  "polybar"
+  "conky"
+  "autostart"
+  "pipewire"
+  "wireplumber"
+)
 
-echo "[2/5] Syncing audio profile from $HOME/.local/bin/audio-profile"
-install -Dm755 "$HOME/.local/bin/audio-profile" "$ROOT_DIR/.local/bin/audio-profile"
+for dir in "${CONFIG_DIRS[@]}"; do
+  if [[ -d "$HOME/.config/$dir" ]]; then
+    echo "Syncing .config/$dir"
+    mkdir -p "$ROOT_DIR/.config/$dir"
+    rsync -a --delete "$HOME/.config/$dir/" "$ROOT_DIR/.config/$dir/"
+  else
+    echo "Skipping missing directory: $HOME/.config/$dir"
+  fi
+done
 
-echo "[3/5] Syncing PipeWire config from $HOME/.config/pipewire"
-rsync -a --delete "$HOME/.config/pipewire/" "$ROOT_DIR/.config/pipewire/"
+if [[ -f "$HOME/.local/bin/audio-profile" ]]; then
+  echo "Syncing .local/bin/audio-profile"
+  install -Dm755 "$HOME/.local/bin/audio-profile" "$ROOT_DIR/.local/bin/audio-profile"
+  # Keep repo copy portable if local script has a hardcoded home path.
+  sed -i \
+    -e 's|/home/nassimna/.local/share/pipewire-discord-fix|$HOME/.local/share/pipewire-discord-fix|g' \
+    -e 's|/home/nassimna/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf|$HOME/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf|g' \
+    "$ROOT_DIR/.local/bin/audio-profile"
+else
+  echo "Skipping missing file: $HOME/.local/bin/audio-profile"
+fi
 
-echo "[4/5] Syncing WirePlumber config from $HOME/.config/wireplumber"
-rsync -a --delete "$HOME/.config/wireplumber/" "$ROOT_DIR/.config/wireplumber/"
+if [[ -d "$HOME/.local/share/pipewire-discord-fix" ]]; then
+  echo "Syncing .local/share/pipewire-discord-fix"
+  mkdir -p "$ROOT_DIR/.local/share/pipewire-discord-fix"
+  rsync -a --delete "$HOME/.local/share/pipewire-discord-fix/" "$ROOT_DIR/.local/share/pipewire-discord-fix/"
+else
+  echo "Skipping missing directory: $HOME/.local/share/pipewire-discord-fix"
+fi
 
-echo "[5/5] Syncing PipeWire Discord fix data from $HOME/.local/share/pipewire-discord-fix"
-rsync -a --delete "$HOME/.local/share/pipewire-discord-fix/" "$ROOT_DIR/.local/share/pipewire-discord-fix/"
-
-echo "Sync complete."
+echo "Sync complete"
