@@ -14,7 +14,7 @@ Personal bspwm backup repo for fresh installs.
 
 ## Recommended restore (fresh install)
 ```bash
-git clone <your-remote-url> bspwm-config
+git clone https://github.com/nassimna/bspwm-config.git bspwm-config
 cd bspwm-config
 ./bootstrap.sh --yes
 ```
