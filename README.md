@@ -66,10 +66,3 @@ Run a quick validation after restore:
 ```bash
 ./check-deps.sh
 ```
-
-## Update this repo from current machine
-```bash
-./sync-from-home.sh
-git add .
-git commit -m "chore: update bspwm config"
-```
