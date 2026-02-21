@@ -1,0 +1,23 @@
+# Virtual microphone sourced from the physical mic.
+# Apps can select this as an input device (e.g., Discord, OBS, browsers).
+context.modules = [
+  {
+    name = libpipewire-module-loopback
+    args = {
+      node.description = "Virtual Mic (PipeWire)"
+      audio.position = [ FL FR ]
+      capture.props = {
+        node.name = "virtual_mic.capture"
+        target.object = "alsa_input.pci-0000_00_1f.3.analog-stereo"
+        node.passive = true
+        stream.dont-remix = true
+      }
+      playback.props = {
+        node.name = "virtual_mic.source"
+        node.description = "Virtual Mic (PipeWire)"
+        media.class = "Audio/Source"
+        audio.position = [ FL FR ]
+      }
+    }
+  }
+]

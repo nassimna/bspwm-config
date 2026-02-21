@@ -1,0 +1,3 @@
+[default-nodes]
+default.configured.audio.source=virtual_mic_ec.source
+default.configured.audio.source.0=virtual_mic.source

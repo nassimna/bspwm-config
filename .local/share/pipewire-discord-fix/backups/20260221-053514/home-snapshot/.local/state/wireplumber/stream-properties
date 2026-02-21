@@ -1,0 +1,19 @@
+[stream-properties]
+Audio/Sink:node.name:auto_null={"volume":1.000000, "mute":false, "channelVolumes":[1.000000, 1.000000], "channelMap":["FL", "FR"]}
+Input/Audio:application.id:org.PulseAudio.pavucontrol={"channelMap":["MONO"], "mute":false, "volume":1.000000, "channelVolumes":[1.000000]}
+Input/Audio:application.name:Chromium\sinput={"channelVolumes":[1.000000, 1.000000], "channelMap":["FL", "FR"], "volume":1.000000, "mute":false}
+Input/Audio:application.name:Google\sChrome\sinput={"channelMap":["FL", "FR"], "channelVolumes":[1.000000, 1.000000], "volume":1.000000, "mute":false}
+Input/Audio:application.name:Microsoft\sEdge\sinput={"channelMap":["FL", "FR"], "mute":false, "channelVolumes":[1.000000, 1.000000], "volume":1.000000}
+Input/Audio:application.name:PipeWire\sALSA\s\ocode-insiders\c={"channelMap":["MONO"], "channelVolumes":[1.000000], "volume":1.000000, "mute":false}
+Input/Audio:application.name:PipeWire\sALSA\s\ohandy\c={"volume":1.000000, "channelVolumes":[1.000000], "channelMap":["MONO"], "mute":false}
+Input/Audio:application.name:WEBRTC\sVoiceEngine={"mute":false, "volume":1.000000, "channelMap":["FL", "FR"], "channelVolumes":[1.000000, 1.000000]}
+Output/Audio:application.name:Chromium={"mute":false, "volume":1.000000, "channelMap":["FL", "FR"], "channelVolumes":[1.000000, 1.000000]}
+Output/Audio:application.name:Google\sChrome={"mute":false, "channelMap":["FL", "FR"], "volume":1.000000, "channelVolumes":[1.000000, 1.000000]}
+Output/Audio:application.name:Microsoft\sEdge={"volume":1.000000, "mute":false, "channelMap":["MONO"], "channelVolumes":[1.000000]}
+Output/Audio:application.name:PipeWire\sALSA\s\ohandy\c={"volume":1.000000, "mute":false, "channelMap":["FL", "FR"], "channelVolumes":[1.000000, 1.000000]}
+Output/Audio:application.name:WEBRTC\sVoiceEngine={"mute":false, "volume":1.000000, "channelMap":["FL", "FR"], "channelVolumes":[1.000000, 1.000000]}
+Output/Audio:media.role:Music={"mute":false, "channelVolumes":[1.000000], "channelMap":["MONO"], "volume":1.000000}
+Output/Audio:media.role:Notification={"volume":1.000000, "channelMap":["FL", "FR"], "mute":false, "channelVolumes":[1.000000, 1.000000]}
+Audio/Source:media.name:Virtual\sMic\s(PipeWire)\soutput={"mute":false, "channelMap":["FL", "FR"], "volume":1.000000, "channelVolumes":[0.176217, 0.176217]}
+Input/Audio:media.name:Virtual\sMic\s(PipeWire)\sinput={"mute":false, "channelMap":["FL", "FR"], "volume":1.000000, "channelVolumes":[1.000000, 1.000000]}
+Input/Audio:media.role:Music={"mute":false, "volume":1.000000, "channelMap":["FL", "FR"], "channelVolumes":[1.000000, 1.000000]}

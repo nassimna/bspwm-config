@@ -1,0 +1,57 @@
+PipeWire 'pipewire-0' [1.4.10, nassimna@nassim-machine, cookie:2799660374]
+ └─ Clients:
+        33. pipewire                            [1.4.10, nassimna@nassim-machine, pid:166197]
+        35. pipewire                            [1.4.10, nassimna@nassim-machine, pid:166195]
+        36. Volume Control                      [1.4.10, nassimna@nassim-machine, pid:1573]
+        43. WEBRTC VoiceEngine                  [1.4.10, nassimna@nassim-machine, pid:171596]
+        44. WEBRTC VoiceEngine                  [1.4.10, nassimna@nassim-machine, pid:171596]
+        62. WirePlumber [export]                [1.4.10, nassimna@nassim-machine, pid:166632]
+        63. WirePlumber                         [1.4.10, nassimna@nassim-machine, pid:166632]
+        82. Chromium input                      [1.4.10, nassimna@nassim-machine, pid:171655]
+        86. wpctl                               [1.4.10, nassimna@nassim-machine, pid:177915]
+        98. Google Chrome                       [1.4.10, nassimna@nassim-machine, pid:12496]
+
+Audio
+ ├─ Devices:
+ │      65. Built-in Audio                      [alsa]
+ │      67. AD107 High Definition Audio Controller [alsa]
+ │  
+ ├─ Sinks:
+ │      47. AD107 High Definition Audio Controller Digital Stereo (HDMI) [vol: 1.00]
+ │  *   58. Built-in Audio Analog Stereo        [vol: 0.70]
+ │  
+ ├─ Sources:
+ │      57. Built-in Audio Analog Stereo        [vol: 0.38]
+ │  
+ ├─ Filters:
+ │    - loopback-166195-29                                          
+ │  *   37. virtual_mic.source                                           [Audio/Source]
+ │      38. virtual_mic.capture                                          [Stream/Input/Audio]
+ │  
+ └─ Streams:
+        41. WEBRTC VoiceEngine                                          
+             40. output_FL       > ALC897 Analog:playback_FL	[active]
+             42. output_FR       > ALC897 Analog:playback_FR	[active]
+        91. WEBRTC VoiceEngine                                          
+             92. input_FL        < Virtual Mic (PipeWire):capture_FL	[active]
+             93. monitor_FL     
+             94. input_FR        < Virtual Mic (PipeWire):capture_FR	[active]
+             95. monitor_FR     
+        99. Google Chrome                                               
+            102. output_FR       > ALC897 Analog:playback_FR	[active]
+            103. output_FL       > ALC897 Analog:playback_FL	[active]
+
+Video
+ ├─ Devices:
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:
+         1. Audio/Source  virtual_mic.source

@@ -1,0 +1,52 @@
+PipeWire 'pipewire-0' [1.4.10, nassimna@nassim-machine, cookie:3114018629]
+ └─ Clients:
+        32. WirePlumber                         [1.4.10, nassimna@nassim-machine, pid:121676]
+        33. pipewire                            [1.4.10, nassimna@nassim-machine, pid:121677]
+        34. Volume Control                      [1.4.10, nassimna@nassim-machine, pid:1573]
+        47. WirePlumber [export]                [1.4.10, nassimna@nassim-machine, pid:121676]
+        64. wpctl                               [1.4.10, nassimna@nassim-machine, pid:165360]
+        70. Chromium input                      [1.4.10, nassimna@nassim-machine, pid:160805]
+        71. WEBRTC VoiceEngine                  [1.4.10, nassimna@nassim-machine, pid:160739]
+        72. WEBRTC VoiceEngine                  [1.4.10, nassimna@nassim-machine, pid:160739]
+        73. Google Chrome                       [1.4.10, nassimna@nassim-machine, pid:12496]
+
+Audio
+ ├─ Devices:
+ │      48. AD107 High Definition Audio Controller [alsa]
+ │      49. Built-in Audio                      [alsa]
+ │  
+ ├─ Sinks:
+ │  *   35. Built-in Audio Analog Stereo        [vol: 0.70]
+ │      56. AD107 High Definition Audio Controller Digital Stereo (HDMI) [vol: 1.00]
+ │  
+ ├─ Sources:
+ │  *   46. Built-in Audio Analog Stereo        [vol: 0.38]
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+        74. Google Chrome                                               
+             77. output_FR       > ALC897 Analog:playback_FR	[active]
+             78. output_FL       > ALC897 Analog:playback_FL	[active]
+        79. WEBRTC VoiceEngine                                          
+             81. output_FL       > ALC897 Analog:playback_FL	[active]
+             84. output_FR       > ALC897 Analog:playback_FR	[active]
+        83. WEBRTC VoiceEngine                                          
+             86. monitor_FL     
+             87. input_FR        < ALC897 Analog:capture_FR	[active]
+             89. monitor_FR     
+             90. input_FL        < ALC897 Analog:capture_FL	[active]
+
+Video
+ ├─ Devices:
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:

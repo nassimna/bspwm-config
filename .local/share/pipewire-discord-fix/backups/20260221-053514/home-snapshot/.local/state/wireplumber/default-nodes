@@ -1,0 +1,2 @@
+[default-nodes]
+default.configured.audio.source=virtual_mic.source

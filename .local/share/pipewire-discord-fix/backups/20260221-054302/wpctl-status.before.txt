@@ -1,0 +1,43 @@
+PipeWire 'pipewire-0' [1.4.10, nassimna@nassim-machine, cookie:4291294069]
+ └─ Clients:
+        33. pipewire                            [1.4.10, nassimna@nassim-machine, pid:186887]
+        35. Volume Control                      [1.4.10, nassimna@nassim-machine, pid:1573]
+        36. pipewire                            [1.4.10, nassimna@nassim-machine, pid:186885]
+        58. WirePlumber                         [1.4.10, nassimna@nassim-machine, pid:187155]
+        62. WirePlumber [export]                [1.4.10, nassimna@nassim-machine, pid:187155]
+        82. wpctl                               [1.4.10, nassimna@nassim-machine, pid:188559]
+
+Audio
+ ├─ Devices:
+ │      57. Built-in Audio                      [alsa]
+ │      63. AD107 High Definition Audio Controller [alsa]
+ │  
+ ├─ Sinks:
+ │  *   48. Built-in Audio Analog Stereo        [vol: 1.00]
+ │      53. AD107 High Definition Audio Controller Digital Stereo (HDMI) [vol: 1.00]
+ │  
+ ├─ Sources:
+ │      54. Built-in Audio Analog Stereo        [vol: 0.90]
+ │  
+ ├─ Filters:
+ │    - echo-cancel-186885-29                                       
+ │      37. virtual_mic_ec.capture                                       [Stream/Input/Audio]
+ │  *   38. virtual_mic_ec.source                                        [Audio/Source]
+ │      39. echo-cancel-sink                                             [Stream/Input/Audio]
+ │  
+ └─ Streams:
+
+Video
+ ├─ Devices:
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:
+         1. Audio/Source  virtual_mic_ec.source

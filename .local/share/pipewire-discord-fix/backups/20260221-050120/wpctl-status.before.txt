@@ -1,0 +1,42 @@
+PipeWire 'pipewire-0' [1.4.10, nassimna@nassim-machine, cookie:2424721317]
+ └─ Clients:
+        32. WirePlumber                         [1.4.10, nassimna@nassim-machine, pid:1805]
+        33. pipewire                            [1.4.10, nassimna@nassim-machine, pid:1806]
+        35. Volume Control                      [1.4.10, nassimna@nassim-machine, pid:1573]
+        47. WirePlumber [export]                [1.4.10, nassimna@nassim-machine, pid:1805]
+        64. Google Chrome input                 [1.4.10, nassimna@nassim-machine, pid:12496]
+        65. Google Chrome                       [1.4.10, nassimna@nassim-machine, pid:12496]
+        71. wpctl                               [1.4.10, nassimna@nassim-machine, pid:121375]
+
+Audio
+ ├─ Devices:
+ │      48. AD107 High Definition Audio Controller [alsa]
+ │      49. Built-in Audio                      [alsa]
+ │  
+ ├─ Sinks:
+ │  *   34. Built-in Audio Analog Stereo        [vol: 0.70]
+ │      56. AD107 High Definition Audio Controller Digital Stereo (HDMI) [vol: 1.00]
+ │  
+ ├─ Sources:
+ │  *   46. Built-in Audio Analog Stereo        [vol: 0.29]
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+        66. Google Chrome                                               
+             68. output_FL       > ALC897 Analog:playback_FL	[active]
+             70. output_FR       > ALC897 Analog:playback_FR	[active]
+
+Video
+ ├─ Devices:
+ │  
+ ├─ Sinks:
+ │  
+ ├─ Sources:
+ │  
+ ├─ Filters:
+ │  
+ └─ Streams:
+
+Settings
+ └─ Default Configured Devices:
