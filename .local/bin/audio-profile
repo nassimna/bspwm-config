@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+PHYSICAL_SOURCE="alsa_input.pci-0000_00_1f.3.analog-stereo"
+VIRTUAL_SOURCE="virtual_mic_ec.source"
+RESTORE_SCRIPT="/home/nassimna/.local/share/pipewire-discord-fix/restore-latest.sh"
+AEC_CONF="/home/nassimna/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf"
+
+usage() {
+  cat <<'EOF'
+Usage: audio-profile <stable|loud|rollback|status>
+
+  stable    Set tuned low-noise profile (physical=75%, virtual=41%)
+  loud      Set louder profile (physical=80%, virtual=46%)
+  rollback  Restore latest backup via restore-latest.sh
+  status    Show current source volumes, default source, and AEC setting
+EOF
+}
+
+has_source() {
+  local source_name="$1"
+  pactl list short sources | awk '{print $2}' | grep -Fxq "$source_name"
+}
+
+get_default_source() {
+  pactl info | awk -F': ' '/Default Source/ {print $2}'
+}
+
+get_noise_suppression_setting() {
+  if [[ ! -f "$AEC_CONF" ]]; then
+    echo "not-found"
+    return
+  fi
+
+  local setting
+  setting="$(rg -o 'webrtc\.noise_suppression=[0-9]+' "$AEC_CONF" | head -n1 || true)"
+  if [[ -n "$setting" ]]; then
+    echo "$setting"
+  else
+    echo "unknown"
+  fi
+}
+
+ensure_noise_suppression_on() {
+  if [[ ! -f "$AEC_CONF" ]]; then
+    echo "Warning: AEC config not found: $AEC_CONF" >&2
+    return
+  fi
+
+  if rg -q 'webrtc\.noise_suppression=1' "$AEC_CONF"; then
+    return
+  fi
+
+  if rg -q 'webrtc\.noise_suppression=' "$AEC_CONF"; then
+    sed -i -E 's/webrtc\.noise_suppression=[0-9]+/webrtc.noise_suppression=1/g' "$AEC_CONF"
+  elif rg -q '^[[:space:]]*aec\.args[[:space:]]*=' "$AEC_CONF"; then
+    sed -i -E '/^[[:space:]]*aec\.args[[:space:]]*=/ s/"$/ webrtc.noise_suppression=1"/' "$AEC_CONF"
+  else
+    echo "Warning: could not locate aec.args in $AEC_CONF" >&2
+    return
+  fi
+
+  systemctl --user restart pipewire pipewire-pulse wireplumber
+}
+
+show_status() {
+  echo "Default source: $(get_default_source)"
+  echo "AEC: $(get_noise_suppression_setting)"
+  if has_source "$VIRTUAL_SOURCE"; then
+    echo "Virtual source volume:"
+    pactl get-source-volume "$VIRTUAL_SOURCE" | head -n1
+  else
+    echo "Virtual source not found: $VIRTUAL_SOURCE"
+  fi
+
+  if has_source "$PHYSICAL_SOURCE"; then
+    echo "Physical source volume:"
+    pactl get-source-volume "$PHYSICAL_SOURCE" | head -n1
+  else
+    echo "Physical source not found: $PHYSICAL_SOURCE"
+  fi
+}
+
+set_profile() {
+  local physical_percent="$1"
+  local virtual_percent="$2"
+
+  ensure_noise_suppression_on
+
+  has_source "$PHYSICAL_SOURCE" || {
+    echo "Missing physical source: $PHYSICAL_SOURCE" >&2
+    exit 1
+  }
+  has_source "$VIRTUAL_SOURCE" || {
+    echo "Missing virtual source: $VIRTUAL_SOURCE" >&2
+    exit 1
+  }
+
+  pactl set-source-volume "$PHYSICAL_SOURCE" "${physical_percent}%"
+  pactl set-source-volume "$VIRTUAL_SOURCE" "${virtual_percent}%"
+  pactl set-default-source "$VIRTUAL_SOURCE"
+  show_status
+}
+
+case "${1:-}" in
+  stable)
+    set_profile 75 41
+    ;;
+  loud)
+    set_profile 80 46
+    ;;
+  rollback)
+    if [[ ! -x "$RESTORE_SCRIPT" ]]; then
+      echo "Missing restore script: $RESTORE_SCRIPT" >&2
+      exit 1
+    fi
+    "$RESTORE_SCRIPT"
+    show_status
+    ;;
+  status)
+    show_status
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac

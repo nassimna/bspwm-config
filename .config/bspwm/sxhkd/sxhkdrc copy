@@ -1,0 +1,169 @@
+#################################################################
+# sxhkd: Refactored Configuration for a Developer Workflow
+#################################################################
+
+#----------------------------------------------------------------
+# CORE BSPWM & SYSTEM
+#----------------------------------------------------------------
+
+# Reload bspwm configuration
+super + shift + r
+    ~/.config/bspwm/bspwmrc
+
+# Reload sxhkd configuration
+super + Escape
+    pkill -USR1 -x sxhkd
+
+# Quit/Restart bspwm
+super + alt + q
+    bspc quit
+
+# Power Menu (using a Rofi script)
+super + x
+    ~/.config/rofi/powermenu/powermenu.sh
+
+# Kill a window process
+super + shift + q
+    bspc node -k
+
+# Close a window
+super + q
+    bspc node -c
+
+# Xkill (for unresponsive applications)
+super + shift + Escape
+    xkill
+
+#----------------------------------------------------------------
+# LAUNCHERS (UNIFIED ON ROFI)
+#----------------------------------------------------------------
+
+# Rofi: Application Launcher (drun mode)
+super + d
+    rofi -show drun -show-icons
+
+# Rofi: Window Switcher
+super + Tab
+    rofi -show window -show-icons
+
+# Rofi: Run Command
+super + shift + d
+    rofi -show run
+
+# Rofi: Combi Mode (Apps + Windows)
+super + F1
+    rofi -show combi -show-icons
+
+#----------------------------------------------------------------
+# PRIMARY APPLICATIONS
+#----------------------------------------------------------------
+
+# Terminal Emulator (Alacritty)
+super + Return
+    alacritty
+
+# File Manager (Thunar)
+super + shift + Return
+    thunar
+
+# Web Browser (Vivaldi)
+super + w
+    microsoft-edge-stable
+
+# Code Editor (Atom)
+super + e
+    code-insiders
+
+#----------------------------------------------------------------
+# WORKSPACE / DESKTOP MANAGEMENT
+#----------------------------------------------------------------
+
+# Focus desktops 1-10
+# for azerty {ampersand,eacute,quotedbl,apostrophe,parenleft,section,egrave,exclam,ccedilla,agrave}
+ctrl + {1-9,0}
+    bspc desktop -f '^{1-9,10}'
+# Focus desktops 11-19
+super + {1-9,0}
+    bspc desktop -f '^{11,12,13,14,15,16,17,18,19,20}'
+
+# Send focused window to desktops 1-10
+ctrl + shift + {1-9,0}
+    bspc node -d '^{1-9,10}' --follow
+
+super + shift + {1-9,0}
+    bspc node -d '^{11,12,13,14,15,16,17,18,19,20}' --follow
+#----------------------------------------------------------------
+# WINDOW STATE & LAYOUT MANAGEMENT
+#----------------------------------------------------------------
+
+# Set window state (tiled, pseudo_tiled, floating, fullscreen)
+super + space
+    bspc node -t \~
+
+# Toggle fullscreen state
+super + f
+    bspc node -t \~fullscreen
+
+# Focus window by direction (vim-like keys)
+super + {h,j,k,l}
+    bspc node -f {west,south,north,east}
+
+# Swap window by direction (vim-like keys)
+super + shift + {h,j,k,l}
+    bspc node -s {west,south,north,east}
+
+# Preselect split direction for next window
+super + ctrl + {h,j,k,l}
+    bspc node -p {west,south,north,east}
+
+# Preselect split ratio
+super + ctrl + {1-9}
+    bspc node -o 0.{1-9}
+
+# Cancel preselection
+super + ctrl + space
+    bspc node -p cancel
+
+# Rotate layout
+alt + space
+    bspc node @/ --rotate 90
+
+# Flip layout     
+alt + shift + space
+    bspc node @/ --flip horizontal
+
+# Balance the window tree
+super + b
+    bspc node @/ --balance
+
+#----------------------------------------------------------------
+# MULTIMEDIA & UTILITIES
+#----------------------------------------------------------------
+
+# Volume control
+XF86Audio{RaiseVolume,LowerVolume,Mute}
+    amixer -D pulse set Master {10%+,10%-,toggle}
+
+# Player control
+XF86Audio{Play,Next,Prev,Stop}
+    playerctl {play-pause,next,previous,stop}
+
+# Brightness control
+XF86MonBrightness{Up,Down}
+    xbacklight -{inc,dec} 10
+
+# Screenshot (full screen)
+Print
+    scrot -e 'mv $f ~/Pictures/screenshot'
+#scrot -s --line mode=edge ~/Pictures/%Y-%m-%d-%H:%M:%S:%s_screenshot.png -e 'xclip -selection clipboard -target image/png -i $f'
+# Screenshot (select area)
+shift + Print
+    scrot -s ~/Pictures/screenshot/%Y-%m-%d-%H:%M:%S:%s_screenshot.png -e 'xclip -selection clipboard -t image/png -i $f'
+
+# Toggle Polybar
+super + y
+    polybar-msg cmd toggle
+
+# Toggle Language between en and ar
+alt + shift + l
+	setxkbmap -query | grep -q 'us' && setxkbmap ara || setxkbmap us,ara
