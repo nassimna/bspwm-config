@@ -9,7 +9,7 @@ This repo now includes the config paths needed by your active BSPWM setup:
 - `.config/pipewire`
 - `.config/wireplumber`
 - `.local/bin/audio-profile`
-- `.local/share/pipewire-discord-fix`
+- `.local/share/pipewire-echo-fix`
 
 ## Recommended restore command
 

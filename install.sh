@@ -37,8 +37,8 @@ done
 echo "Installing .local/bin/audio-profile -> $LOCAL_BIN_DIR/audio-profile"
 install -Dm755 "$ROOT_DIR/.local/bin/audio-profile" "$LOCAL_BIN_DIR/audio-profile"
 
-echo "Restoring .local/share/pipewire-discord-fix -> $LOCAL_SHARE_DIR/pipewire-discord-fix"
-restore_tree "$ROOT_DIR/.local/share/pipewire-discord-fix" "$LOCAL_SHARE_DIR/pipewire-discord-fix"
+echo "Restoring .local/share/pipewire-echo-fix -> $LOCAL_SHARE_DIR/pipewire-echo-fix"
+restore_tree "$ROOT_DIR/.local/share/pipewire-echo-fix" "$LOCAL_SHARE_DIR/pipewire-echo-fix"
 
 if [[ "$CREATE_SXHKD_COMPAT_LINK" == "1" ]]; then
   mkdir -p "$SXHKD_DIR"

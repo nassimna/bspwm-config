@@ -43,20 +43,28 @@ done
 if [[ -f "$SOURCE_LOCAL_BIN_DIR/audio-profile" ]]; then
   echo "Syncing .local/bin/audio-profile from $SOURCE_LOCAL_BIN_DIR/audio-profile"
   install -Dm755 "$SOURCE_LOCAL_BIN_DIR/audio-profile" "$ROOT_DIR/.local/bin/audio-profile"
-  # Keep repo copy portable if local script has a hardcoded home path.
+  # Keep repo copy portable and normalized.
   sed -i \
-    -e 's|/home/nassimna/.local/share/pipewire-discord-fix|$HOME/.local/share/pipewire-discord-fix|g' \
+    -e 's|pipewire-discord-fix|pipewire-echo-fix|g' \
     -e 's|/home/nassimna/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf|$HOME/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf|g' \
     "$ROOT_DIR/.local/bin/audio-profile"
 else
   echo "Skipping missing file: $SOURCE_LOCAL_BIN_DIR/audio-profile"
 fi
 
-if [[ -d "$SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix" ]]; then
-  echo "Syncing .local/share/pipewire-discord-fix from $SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix"
-  sync_tree "$SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix" "$ROOT_DIR/.local/share/pipewire-discord-fix"
+if [[ -d "$SOURCE_LOCAL_SHARE_DIR/pipewire-echo-fix" ]]; then
+  echo "Syncing .local/share/pipewire-echo-fix from $SOURCE_LOCAL_SHARE_DIR/pipewire-echo-fix"
+  sync_tree "$SOURCE_LOCAL_SHARE_DIR/pipewire-echo-fix" "$ROOT_DIR/.local/share/pipewire-echo-fix"
+elif [[ -d "$SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix" ]]; then
+  echo "Syncing legacy .local/share/pipewire-discord-fix into repo .local/share/pipewire-echo-fix"
+  sync_tree "$SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix" "$ROOT_DIR/.local/share/pipewire-echo-fix"
 else
-  echo "Skipping missing directory: $SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix"
+  echo "Skipping missing directories: $SOURCE_LOCAL_SHARE_DIR/pipewire-echo-fix and $SOURCE_LOCAL_SHARE_DIR/pipewire-discord-fix"
+fi
+
+# Normalize legacy naming inside synced scripts.
+if [[ -f "$ROOT_DIR/.local/share/pipewire-echo-fix/restore-latest.sh" ]]; then
+  sed -i 's|pipewire-discord-fix|pipewire-echo-fix|g' "$ROOT_DIR/.local/share/pipewire-echo-fix/restore-latest.sh"
 fi
 
 echo "Sync complete"

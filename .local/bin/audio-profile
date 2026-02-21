@@ -3,7 +3,7 @@ set -euo pipefail
 
 PHYSICAL_SOURCE="alsa_input.pci-0000_00_1f.3.analog-stereo"
 VIRTUAL_SOURCE="virtual_mic_ec.source"
-RESTORE_SCRIPT="$HOME/.local/share/pipewire-discord-fix/restore-latest.sh"
+RESTORE_SCRIPT="$HOME/.local/share/pipewire-echo-fix/restore-latest.sh"
 AEC_CONF="$HOME/.config/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf"
 
 usage() {

@@ -10,7 +10,7 @@ Personal bspwm backup repo for fresh installs.
 - `.local/bin/audio-profile`
 - `.config/pipewire`
 - `.config/wireplumber`
-- `.local/share/pipewire-discord-fix` (rollback snapshots + restore script)
+- `.local/share/pipewire-echo-fix` (rollback snapshots + restore script)
 
 ## Recommended restore (fresh install)
 ```bash

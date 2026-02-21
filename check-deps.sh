@@ -95,7 +95,15 @@ check_path "$CONFIG_HOME/polybar/config.ini"
 check_path "$CONFIG_HOME/conky/obsidian_todos.conf"
 check_path "$CONFIG_HOME/pipewire/pipewire.conf.d/70-virtual-mic-ec.conf"
 check_path "$LOCAL_BIN_DIR/audio-profile"
-check_path "$LOCAL_SHARE_DIR/pipewire-discord-fix/restore-latest.sh"
+if [[ -e "$LOCAL_SHARE_DIR/pipewire-echo-fix/restore-latest.sh" ]]; then
+  check_path "$LOCAL_SHARE_DIR/pipewire-echo-fix/restore-latest.sh"
+elif [[ -e "$LOCAL_SHARE_DIR/pipewire-discord-fix/restore-latest.sh" ]]; then
+  warn_path "$LOCAL_SHARE_DIR/pipewire-discord-fix/restore-latest.sh"
+  echo "[warn] migrate this path to: $LOCAL_SHARE_DIR/pipewire-echo-fix"
+  WARNINGS=1
+else
+  check_path "$LOCAL_SHARE_DIR/pipewire-echo-fix/restore-latest.sh"
+fi
 warn_path "$TARGET_HOME/drive/obsidian-vault/00 Dashboard/Todos.md"
 
 if compgen -G "$TARGET_HOME/wallpapers*" >/dev/null; then
