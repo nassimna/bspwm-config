@@ -1,11 +1,38 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# -----------------------------------------------------------------------------
+# BSPWM Config Bootstrap
+#
+# Purpose:
+#   Restore this repo's desktop config onto a fresh machine in a portable way.
+#
+# What this script does:
+#   1) Detects package manager (pacman/apt/dnf/zypper) unless overridden.
+#   2) Installs required packages in best-effort mode (or strict mode).
+#   3) Restores config files and scripts into target directories.
+#   4) Creates an sxhkd compatibility symlink (optional).
+#   5) Runs validation checks after restore.
+#
+# Package categories installed:
+#   - WM and UI: bspwm, sxhkd, polybar, rofi, feh, picom, conky
+#   - Audio/session: pipewire, wireplumber, alsa-utils, playerctl
+#   - Desktop helpers: network applet, power manager, bluetooth tray, dex
+#   - Utilities: ripgrep, git, rsync, xrandr/setxkbmap, screenshot tools
+#   - Python weather script runtime: python + requests
+#
+# Notes:
+#   - Use '--list-packages' to print the exact package names for your distro.
+#   - Use '--skip-deps' if you only want to restore files.
+# -----------------------------------------------------------------------------
+
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 INSTALL_DEPS=1
 ASSUME_YES=0
 STRICT_PACKAGES=0
+LIST_PACKAGES_ONLY=0
+PACKAGE_MANAGER_OVERRIDE=""
 CREATE_SXHKD_COMPAT_LINK=1
 
 TARGET_HOME="${TARGET_HOME:-$HOME}"
@@ -22,12 +49,14 @@ Usage: bootstrap.sh [options]
 Install dependencies (best-effort), restore configs, and validate setup.
 
 Options:
+  --list-packages        Print package list for detected/selected package manager, then exit.
+  --package-manager PM   Force package manager: pacman|apt|dnf|zypper.
   --skip-deps            Do not install packages.
   --yes                  Non-interactive package install where supported.
   --strict-packages      Fail if any package cannot be installed.
   --target-home PATH     Target home directory (default: $HOME).
   --config-home PATH     Target config home (default: <target-home>/.config).
-  --local-bin PATH       Target local bin (default: ~/.local/bin).
+  --local-bin PATH       Target local bin (default: <target-home>/.local/bin).
   --local-share PATH     Target local share (default: <target-home>/.local/share).
   --bspwm-dir PATH       Target bspwm config dir (default: <config-home>/bspwm).
   --sxhkd-dir PATH       Target sxhkd config dir (default: <config-home>/sxhkd).
@@ -35,6 +64,8 @@ Options:
   -h, --help             Show this help.
 
 Examples:
+  ./bootstrap.sh --list-packages
+  ./bootstrap.sh --package-manager pacman --list-packages
   ./bootstrap.sh --yes
   ./bootstrap.sh --skip-deps
   ./bootstrap.sh --config-home "$HOME/.config" --bspwm-dir "$HOME/.config/bspwm"
@@ -49,6 +80,7 @@ warn() {
   printf 'Warning: %s\n' "$*" >&2
 }
 
+# Run a command as root when possible.
 run_as_root() {
   if [[ "${EUID:-$(id -u)}" -eq 0 ]]; then
     "$@"
@@ -59,6 +91,7 @@ run_as_root() {
   fi
 }
 
+# Detect the current system package manager.
 detect_package_manager() {
   if command -v pacman >/dev/null 2>&1; then
     echo "pacman"
@@ -79,6 +112,7 @@ detect_package_manager() {
   echo ""
 }
 
+# Return the exact package list for a package manager.
 get_packages_for_pm() {
   local pm="$1"
   case "$pm" in
@@ -228,6 +262,20 @@ EOF
   esac
 }
 
+print_package_plan() {
+  local pm="$1"
+  local count
+  count="$(get_packages_for_pm "$pm" | sed '/^$/d' | wc -l | tr -d ' ')"
+  log "Dependency install plan:"
+  log "  package manager: $pm"
+  log "  packages ($count):"
+  while IFS= read -r pkg; do
+    [[ -z "$pkg" ]] && continue
+    log "    - $pkg"
+  done < <(get_packages_for_pm "$pm")
+}
+
+# Install one package based on package manager.
 install_package() {
   local pm="$1"
   local pkg="$2"
@@ -267,6 +315,7 @@ install_package() {
   esac
 }
 
+# Install dependency list, continue on package-level failures by default.
 install_dependencies() {
   local pm="$1"
   local failed=()
@@ -306,6 +355,14 @@ install_dependencies() {
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    --list-packages)
+      LIST_PACKAGES_ONLY=1
+      shift
+      ;;
+    --package-manager)
+      PACKAGE_MANAGER_OVERRIDE="$2"
+      shift 2
+      ;;
     --skip-deps)
       INSTALL_DEPS=0
       shift
@@ -383,11 +440,36 @@ log "  BSPWM_DIR=$BSPWM_DIR"
 log "  SXHKD_DIR=$SXHKD_DIR"
 log
 
-if [[ "$INSTALL_DEPS" -eq 1 ]]; then
+PM="$PACKAGE_MANAGER_OVERRIDE"
+if [[ -z "$PM" ]]; then
   PM="$(detect_package_manager)"
+fi
+
+if [[ -n "$PM" ]]; then
+  case "$PM" in
+    pacman|apt|dnf|zypper)
+      ;;
+    *)
+      warn "Unsupported package manager override: $PM"
+      exit 1
+      ;;
+  esac
+fi
+
+if [[ "$LIST_PACKAGES_ONLY" -eq 1 ]]; then
+  if [[ -z "$PM" ]]; then
+    warn "Could not detect package manager. Use '--package-manager <pm>' to list packages."
+    exit 1
+  fi
+  print_package_plan "$PM"
+  exit 0
+fi
+
+if [[ "$INSTALL_DEPS" -eq 1 ]]; then
   if [[ -z "$PM" ]]; then
     warn "No supported package manager detected (pacman/apt/dnf/zypper). Skipping dependency install."
   else
+    print_package_plan "$PM"
     install_dependencies "$PM" || {
       warn "Dependency installation was incomplete."
       if [[ "$STRICT_PACKAGES" -eq 1 ]]; then

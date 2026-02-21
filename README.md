@@ -19,6 +19,11 @@ cd bspwm-config
 ./bootstrap.sh --yes
 ```
 
+Preview what will be installed first:
+```bash
+./bootstrap.sh --list-packages
+```
+
 `bootstrap.sh` does:
 - best-effort dependency install (supports `pacman`, `apt`, `dnf`, `zypper`)
 - config restore to configurable target paths
