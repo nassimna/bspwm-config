@@ -6,6 +6,8 @@ This repo now includes the config paths needed by your active BSPWM setup:
 - `.config/polybar`
 - `.config/conky`
 - `.config/autostart`
+- `.config/ghostty`
+- `.tmux.conf`
 - `.config/pipewire`
 - `.config/wireplumber`
 - `.local/bin/audio-profile`

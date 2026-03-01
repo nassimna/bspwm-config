@@ -13,6 +13,7 @@ CONFIG_DIRS=(
   "polybar"
   "conky"
   "autostart"
+  "ghostty"
   "pipewire"
   "wireplumber"
 )
@@ -39,6 +40,13 @@ for dir in "${CONFIG_DIRS[@]}"; do
     echo "Skipping missing directory: $SOURCE_CONFIG_HOME/$dir"
   fi
 done
+
+if [[ -f "$SOURCE_HOME/.tmux.conf" ]]; then
+  echo "Syncing .tmux.conf from $SOURCE_HOME/.tmux.conf"
+  install -Dm644 "$SOURCE_HOME/.tmux.conf" "$ROOT_DIR/.tmux.conf"
+else
+  echo "Skipping missing file: $SOURCE_HOME/.tmux.conf"
+fi
 
 if [[ -f "$SOURCE_LOCAL_BIN_DIR/audio-profile" ]]; then
   echo "Syncing .local/bin/audio-profile from $SOURCE_LOCAL_BIN_DIR/audio-profile"

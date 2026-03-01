@@ -7,6 +7,8 @@ Personal bspwm backup repo for fresh installs.
 - `.config/polybar`
 - `.config/conky`
 - `.config/autostart`
+- `.config/ghostty`
+- `.tmux.conf`
 - `.local/bin/audio-profile`
 - `.config/pipewire`
 - `.config/wireplumber`

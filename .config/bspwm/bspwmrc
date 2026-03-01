@@ -54,8 +54,9 @@ bspc rule -a Arcolinux-welcome-app.py state=floating
 bspc rule -a Arcolinux-calamares-tool.py state=floating
 bspc rule -a feh state=floating
 bspc rule -a Alacritty state=floating
+bspc rule -a Ghostty state=floating
+bspc rule -a com.mitchellh.ghostty state=floating
 bspc rule -a Thunar state=floating
 bspc rule -a Galculator state=floating
 bspc rule -a Oblogout state=floating
 bspc rule -a Xfce4-terminal state=floating
-

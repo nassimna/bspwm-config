@@ -54,9 +54,9 @@ super + F1
 # PRIMARY APPLICATIONS
 #----------------------------------------------------------------
 
-# Terminal Emulator (Alacritty)
+# Terminal Emulator (Ghostty + tmux)
 super + Return
-    alacritty
+    ghostty -e tmux new-session -A -s main
 
 # File Manager (Thunar)
 super + t

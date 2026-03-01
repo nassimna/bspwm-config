@@ -15,6 +15,7 @@ CONFIG_DIRS=(
   "polybar"
   "conky"
   "autostart"
+  "ghostty"
   "pipewire"
   "wireplumber"
 )
@@ -33,6 +34,9 @@ for dir in "${CONFIG_DIRS[@]}"; do
   echo "Restoring .config/$dir -> $CONFIG_HOME/$dir"
   restore_tree "$ROOT_DIR/.config/$dir" "$CONFIG_HOME/$dir"
 done
+
+echo "Installing .tmux.conf -> $TARGET_HOME/.tmux.conf"
+install -Dm644 "$ROOT_DIR/.tmux.conf" "$TARGET_HOME/.tmux.conf"
 
 echo "Installing .local/bin/audio-profile -> $LOCAL_BIN_DIR/audio-profile"
 install -Dm755 "$ROOT_DIR/.local/bin/audio-profile" "$LOCAL_BIN_DIR/audio-profile"
