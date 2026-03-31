@@ -1,6 +1,15 @@
 # bspwm-config
 
 Personal bspwm backup repo for fresh installs.
+This repo is for restoring my Linux desktop environment on a new machine with a single bootstrap flow instead of piecing configs back together by hand.
+
+Quick start:
+
+```bash
+git clone https://github.com/nassimna/bspwm-config.git
+cd bspwm-config
+./bootstrap.sh --yes
+```
 
 ## Included
 - `.config/bspwm`
